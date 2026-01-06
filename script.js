@@ -124,14 +124,17 @@ function render() {
             catTotals[t.cat] = (catTotals[t.cat] || 0) + t.valor;
         }
 
+        // ===== LINHA DA TABELA (RESPONSIVA) =====
         tbody.innerHTML += `
             <tr>
-                <td>${new Date(t.data).toLocaleDateString('pt-BR')}</td>
-                <td>${t.desc}</td>
-                <td>${t.cat}</td>
-                <td>R$ ${t.valor.toFixed(2)}</td>
-                <td><span class="tag ${t.tipo}">${t.tipo}</span></td>
-                <td>
+                <td data-label="Data">${new Date(t.data).toLocaleDateString('pt-BR')}</td>
+                <td data-label="Descrição">${t.desc}</td>
+                <td data-label="Categoria">${t.cat}</td>
+                <td data-label="Valor">R$ ${t.valor.toFixed(2)}</td>
+                <td data-label="Tipo">
+                    <span class="tag ${t.tipo}">${t.tipo}</span>
+                </td>
+                <td data-label="Ação">
                     <button onclick="editEntry(${t.id})">✏️</button>
                     <button onclick="deleteEntry(${t.id})">🗑️</button>
                 </td>

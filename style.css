@@ -131,3 +131,77 @@ th, td {
     background: #ffe3e3;
     color: #c82333;
 }
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+/* Tablets */
+@media (max-width: 1024px) {
+
+    .top-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+
+    .header-main {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .month-filter {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-add {
+        width: 100%;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    /* Tabela responsiva */
+    table thead {
+        display: none;
+    }
+
+    table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 5px;
+        border: none;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #555;
+    }
+}
