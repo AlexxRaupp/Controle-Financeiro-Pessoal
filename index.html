@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #1e1e26;
+            --card-bg: #ffffff;
+            --primary: #2c3e50;
+            --despesa: #eb4d4b;
+            --receita: #6ab04c;
+            --saldo: #22a6b3;
+            --accent: #f0932b;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            color: #333;
+        }
+
+        .header-main {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Menu de Meses */
+        .month-filter {
+            background: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .month-btn {
+            border: 1px solid #ddd;
+            background: white;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .month-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .container { padding: 20px; max-width: 1200px; margin: auto; }
+
+        /* Cards Estilo Imagem */
+        .top-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-bottom: 5px solid #ddd;
+        }
+
+        .card-box.despesa { border-color: var(--despesa); }
+        .card-box.receita { border-color: var(--receita); }
+        .card-box.saldo { border-color: var(--saldo); }
+
+        .card-info h3 { margin: 0; font-size: 14px; color: #666; text-transform: uppercase; }
+        .card-info p { margin: 5px 0 0; font-size: 24px; font-weight: bold; }
+
+        /* Layout dos Gráficos */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Formulário */
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        input, select, button {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+        th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 13px; color: #888; }
+        td { padding: 15px; border-top: 1px solid #eee; }
+
+        .tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .tag.receita { background: #e3f9e5; color: #1e7e34; }
+        .tag.despesa { background: #ffe3e3; color: #c82333; }
+    </style>
+</head>
+<body>
+
+    <div class="header-main">
+        <h2 style="margin:0">CONTROLE FINANCEIRO</h2>
+        <div id="user-info">Meu Site Pessoal</div>
+    </div>
+
+    <div class="month-filter" id="monthFilter">
+        <!-- Gerado via JS -->
+    </div>
+
+    <div class="container">
+        
+        <!-- CARDS SUPERIORES -->
+        <div class="top-cards">
+            <div class="card-box despesa">
+                <div class="card-info"><h3>Despesa</h3><p id="txt-despesa" style="color: var(--despesa)">R$ 0,00</p></div>
+            </div>
+            <div class="card-box receita">
+                <div class="card-info"><h3>Receita</h3><p id="txt-receita" style="color: var(--receita)">R$ 0,00</p></div>
+            </div>
+            <div class="card-box saldo">
+                <div class="card-info"><h3>Saldo</h3><p id="txt-saldo" style="color: var(--saldo)">R$ 0,00</p></div>
+            </div>
+        </div>
+
+        <!-- GRÁFICOS -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h4 style="margin-top:0">Análise de Saldo Acumulado</h4>
+                <canvas id="balanceChart" height="120"></canvas>
+            </div>
+            <div class="chart-card">
+                <h4 style="margin-top:0">Distribuição por Categoria</h4>
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+
+        <!-- FORMULÁRIO -->
+        <div class="form-section">
+            <h4 style="margin-top:0">Novo Lançamento</h4>
+            <div class="form-grid">
+                <input type="text" id="f-desc" placeholder="Descrição">
+                <input type="number" id="f-valor" placeholder="Valor R$">
+                <input type="date" id="f-data">
+                <select id="f-tipo">
+                    <option value="receita">Receita (+)</option>
+                    <option value="despesa">Despesa (-)</option>
+                </select>
+                <select id="f-cat">
+                    <option value="Moradia">Moradia</option>
+                    <option value="Alimentação">Alimentação</option>
+                    <option value="Educação">Educação</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Salário">Salário</option>
+                    <option value="Extra">Extra</option>
+                </select>
+                <button class="btn-add" onclick="addEntry()">ADICIONAR</button>
+            </div>
+        </div>
+
+        <!-- TABELA -->
+        <div class="chart-card">
+            <table id="table-entries">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Categoria</th>
+                        <th>Valor</th>
+                        <th>Tipo</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const months = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+        let currentMonth = new Date().getMonth();
+        let transactions = JSON.parse(localStorage.getItem('my_finances')) || [];
+
+        // Inicia o filtro de meses
+        const filterDiv = document.getElementById('monthFilter');
+        months.forEach((m, idx) => {
+            const btn = document.createElement('button');
+            btn.innerText = m;
+            btn.className = `month-btn ${idx === currentMonth ? 'active' : ''}`;
+            btn.onclick = () => {
+                currentMonth = idx;
+                document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                render();
+            };
+            filterDiv.appendChild(btn);
+        });
+
+        function addEntry() {
+            const desc = document.getElementById('f-desc').value;
+            const valor = parseFloat(document.getElementById('f-valor').value);
+            const data = document.getElementById('f-data').value;
+            const tipo = document.getElementById('f-tipo').value;
+            const cat = document.getElementById('f-cat').value;
+
+            if(!desc || !valor || !data) return alert("Preencha todos os campos!");
+
+            transactions.push({ id: Date.now(), desc, valor, data, tipo, cat });
+            localStorage.setItem('my_finances', JSON.stringify(transactions));
+            render();
+        }
+
+        function deleteEntry(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            localStorage.setItem('my_finances', JSON.stringify(transactions));
+            render();
+        }
+
+        let chart1, chart2;
+
+        function render() {
+            const tbody = document.querySelector('#table-entries tbody');
+            tbody.innerHTML = '';
+            
+            // Filtrar transações do mês selecionado
+            const filtered = transactions.filter(t => new Date(t.data).getMonth() === currentMonth);
+
+            let totalR = 0, totalD = 0;
+            const catData = {};
+
+            filtered.sort((a,b) => new Date(a.data) - new Date(b.data)).forEach(t => {
+                if(t.tipo === 'receita') totalR += t.valor;
+                else {
+                    totalD += t.valor;
+                    catData[t.cat] = (catData[t.cat] || 0) + t.valor;
+                }
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${new Date(t.data).toLocaleDateString('pt-BR')}</td>
+                        <td>${t.desc}</td>
+                        <td>${t.cat}</td>
+                        <td>R$ ${t.valor.toFixed(2)}</td>
+                        <td><span class="tag ${t.tipo}">${t.tipo}</span></td>
+                        <td><button onclick="deleteEntry(${t.id})" style="border:none; cursor:pointer">🗑️</button></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('txt-receita').innerText = `R$ ${totalR.toFixed(2)}`;
+            document.getElementById('txt-despesa').innerText = `R$ ${totalD.toFixed(2)}`;
+            document.getElementById('txt-saldo').innerText = `R$ ${(totalR - totalD).toFixed(2)}`;
+
+            updateCharts(filtered, catData);
+        }
+
+        function updateCharts(filtered, catData) {
+            const ctx1 = document.getElementById('balanceChart').getContext('2d');
+            const ctx2 = document.getElementById('categoryChart').getContext('2d');
+
+            if(chart1) chart1.destroy();
+            if(chart2) chart2.destroy();
+
+            // Gráfico de Linha (Simulando saldo do mês)
+            chart1 = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: filtered.map(t => new Date(t.data).getDate()),
+                    datasets: [{
+                        label: 'Evolução Diária',
+                        data: filtered.map(t => t.tipo === 'receita' ? t.valor : -t.valor),
+                        borderColor: '#22a6b3',
+                        backgroundColor: 'rgba(34, 166, 179, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                }
+            });
+
+            // Gráfico de Pizza (Categorias)
+            chart2 = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(catData),
+                    datasets: [{
+                        data: Object.values(catData),
+                        backgroundColor: ['#eb4d4b', '#f0932b', '#f9ca24', '#badc58', '#6ab04c']
+                    }]
+                }
+            });
+        }
+
+        // Definir data de hoje no input por padrão
+        document.getElementById('f-data').valueAsDate = new Date();
+        render();
+    </script>
+</body>
+</html>
