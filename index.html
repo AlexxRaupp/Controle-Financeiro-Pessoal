@@ -1,103 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Financeiro Pro</title>
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- CSS externo -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Controle Financeiro</title>
 </head>
 <body>
 
-    <div class="header-main">
-        <h2>CONTROLE FINANCEIRO</h2>
-        <div id="user-info">Meu Site Pessoal</div>
-    </div>
+  <h2>Controle Financeiro</h2>
 
-    <div class="month-filter" id="monthFilter"></div>
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Senha">
 
-    <div class="container">
-        
-        <!-- CARDS -->
-        <div class="top-cards">
-            <div class="card-box despesa">
-                <div class="card-info">
-                    <h3>Despesa</h3>
-                    <p id="txt-despesa">R$ 0,00</p>
-                </div>
-            </div>
-            <div class="card-box receita">
-                <div class="card-info">
-                    <h3>Receita</h3>
-                    <p id="txt-receita">R$ 0,00</p>
-                </div>
-            </div>
-            <div class="card-box saldo">
-                <div class="card-info">
-                    <h3>Saldo</h3>
-                    <p id="txt-saldo">R$ 0,00</p>
-                </div>
-            </div>
-        </div>
+  <button id="btnLogin">Entrar</button>
+  <button id="btnRegister">Cadastrar</button>
 
-        <!-- GRÁFICOS -->
-        <div class="charts-section">
-            <div class="chart-card">
-                <h4>Análise de Saldo Acumulado</h4>
-                <canvas id="balanceChart" height="120"></canvas>
-            </div>
-            <div class="chart-card">
-                <h4>Distribuição por Categoria</h4>
-                <canvas id="categoryChart"></canvas>
-            </div>
-        </div>
-
-        <!-- FORMULÁRIO -->
-        <div class="form-section">
-            <h4>Novo Lançamento</h4>
-            <div class="form-grid">
-                <input type="text" id="f-desc" placeholder="Descrição">
-                <input type="number" id="f-valor" placeholder="Valor R$">
-                <input type="date" id="f-data">
-                <select id="f-tipo">
-                    <option value="receita">Receita (+)</option>
-                    <option value="despesa">Despesa (-)</option>
-                </select>
-                <select id="f-cat">
-                    <option value="Moradia">Moradia</option>
-                    <option value="Alimentação">Alimentação</option>
-                    <option value="Educação">Educação</option>
-                    <option value="Transporte">Transporte</option>
-                    <option value="Salário">Salário</option>
-                    <option value="Extra">Extra</option>
-                </select>
-                <button class="btn-add" onclick="addEntry()">ADICIONAR</button>
-            </div>
-        </div>
-
-        <!-- TABELA -->
-        <div class="chart-card">
-            <table id="table-entries">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Descrição</th>
-                        <th>Categoria</th>
-                        <th>Valor</th>
-                        <th>Tipo</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- JS externo -->
-    <script src="script.js"></script>
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
