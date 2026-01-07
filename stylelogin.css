@@ -1,74 +1,88 @@
- * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-    body {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #f2f2f2;
-    }
+body {
+  min-height: 100vh; /* Alterado de height para min-height para evitar problemas em telas pequenas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f2f2f2;
+  padding: 20px; /* Adicionado um respiro nas bordas para o mobile */
+}
 
-    .container {
-      width: 320px;
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
+.container {
+  width: 100%; /* Ocupa 100% da largura disponível... */
+  max-width: 380px; /* ...mas não passa de 380px no desktop */
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
 
-    .tabs {
-      display: flex;
-      background: #eee;
-      border-radius: 30px;
-      margin-bottom: 20px;
-    }
+.tabs {
+  display: flex;
+  background: #eee;
+  border-radius: 30px;
+  margin-bottom: 20px;
+}
 
-    .tabs button {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      background: transparent;
-      font-weight: bold;
-    }
+.tabs button {
+  flex: 1;
+  padding: 12px; /* Aumentado levemente para facilitar o clique com o dedo */
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  background: transparent;
+  font-weight: bold;
+  font-size: 16px; /* Tamanho de fonte ideal para mobile */
+  transition: 0.3s;
+}
 
-    .tabs .active {
-      background: #6c63ff;
-      color: white;
-    }
+.tabs .active {
+  background: #6c63ff;
+  color: white;
+}
 
-    .form {
-      display: none;
-      flex-direction: column;
-    }
+.form {
+  display: none;
+  flex-direction: column;
+}
 
-    .form.active {
-      display: flex;
-    }
+.form.active {
+  display: flex;
+}
 
-    .form input {
-      margin-bottom: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
+.form input {
+  margin-bottom: 15px; /* Aumentado o espaçamento entre campos */
+  padding: 14px; /* Input maior é mais fácil de digitar no celular */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px; /* Evita que o iOS dê zoom automático ao clicar no input */
+}
 
-    .remember {
-      font-size: 14px;
-      margin-bottom: 15px;
-    }
+.remember {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
 
-    .form button {
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #6c63ff;
-      color: white;
-      cursor: pointer;
-    }
+.form button {
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #6c63ff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Ajuste específico para telas muito pequenas (opcional) */
+@media (max-width: 360px) {
+  .container {
+    padding: 20px;
+  }
+}
