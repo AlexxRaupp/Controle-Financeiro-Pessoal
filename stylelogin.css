@@ -15,8 +15,8 @@ body {
 }
 
 .container {
-  width: 100%; /* Ocupa 100% da largura disponível... */
-  max-width: 380px; /* ...mas não passa de 380px no desktop */
+  width: 90%;          /* No celular, ocupa 90% da largura da tela */
+  max-width: 380px;    /* No computador, ele não passa de 380px (fica elegante) */
   background: #fff;
   padding: 25px;
   border-radius: 12px;
